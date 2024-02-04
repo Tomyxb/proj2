@@ -1,58 +1,37 @@
-# Project X README
-
+# Project 2 README
+Xinbang Yuan 920853308
 Student 1: Partner1 Name (123456789)
 
 Student 2: Partner2 Name (123456987)
 
 ## Project Status
-This the current status of the project ...
-
+CDSVReader.cpp completed
+CDSVWriter.cpp N/A
+CDSVReaderTest.cpp ing
+CDSVWriterTest.cpp N/A
+XMLReader.cpp on Zhongtian
+XMLWriter.cpp on Zhongtian
+XMLReaderTest.cpp ?
+XMLWriterTest.cpp ?
+Makefile ?
 ## Known Issues
-The project fails to function properly in ...
 
 ## Code References
-* [Different ways to initialize variables](https://stackoverflow.com/questions/22543875/different-ways-to-initialize-variables)
-* [Some other link](https://stackoverflow.com)
 
 ## Generative AI Use
-I used ChatGPT for Prompt 1, and ZZZZZ for Prompt 2....
+I used ChatGPT for Prompt 1.
 
 ### Prompt 1
-How do I iterate over all characters in a string in C++17?
+Do I have to put sth in CDSVReader::~CDSVReader(){} for anything? 
 
 ### Response 1
-In C++17, you can iterate over all characters in a string using a range-based for loop. Here's an example:
-```cpp
-#include <iostream>
-#include <string>
-
-int main() {
-    std::string myString = "Hello, World!";
-
-    // Using range-based for loop to iterate over characters in the string
-    for (char c : myString) {
-        std::cout << c << " ";
-    }
-
-    return 0;
+Since all ptrs are smart ptrs which do not need to free spaces for, there is no need to write anything. 
+//gpt
+CDSVReader::~CDSVReader() {
+// There is no need to manually release DImplementation, as unique_ptr will handle it automatically
 }
-```
-In this example, the `for (char c : myString)` loop iterates over each character in the string `myString`, and the variable `c` takes on the value of each character in turn. The loop body prints each character followed by a space.
-
-This is a concise and readable way to iterate over the characters in a string in C++17.
-
 ### Chagnes 1
-I only needed the `for` loop part, and my string was named `bar` so I changed it to just:
-```cpp
-// AI Generated
-for (char c : bar) {
-```
+N/A
 
-### Prompt 2
-My other prompt...
 
-### Response 2
-The other response...
 
-### Changes 2
-The other changes made...
