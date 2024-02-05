@@ -5,21 +5,17 @@ Student 1: Partner1 Name (123456789)
 Student 2: Partner2 Name (123456987)
 
 ## Project Status
-CDSVReader.cpp completed
-CDSVWriter.cpp ing
-CDSVReaderTest.cpp completed
-CDSVWriterTest.cpp ing
 XMLReader.cpp on Zhongtian
 XMLWriter.cpp on Zhongtian
-XMLReaderTest.cpp ?
-XMLWriterTest.cpp ?
+XMLReaderTest.cpp on
+XMLWriterTest.cpp on
 Makefile ing
 ## Known Issues
 
 ## Code References
 
 ## Generative AI Use
-I used ChatGPT for prompt 1, prompt2
+I used ChatGPT4.0 for prompt 1, prompt2, prompt3, prompt4
 
 ### Prompt 1
 Do I have to put sth in CDSVReader::~CDSVReader(){} for anything? 
@@ -30,8 +26,7 @@ Since all ptrs are smart ptrs which do not need to free spaces for, there is no 
 CDSVReader::~CDSVReader() {
 // There is no need to manually release DImplementation, as unique_ptr will handle it automatically
 }
-### Chagnes 1
-N/A
+
 
 ### Prompt 2
 Which kinds of input is what the normal case should be?
@@ -55,4 +50,21 @@ public:
     }
 };
 
+### Prompt 3
+No extra situation dealing (eempty line, '"->,' ,testing "/" )
 
+### Chagnes 1
+add
+
+### Prompt 4
+same as prompt2 for CDSWriter
+### Response 4
+class MockDataSink : public CDataSink {
+public:
+    std::string data;
+
+    virtual bool Write(const std::string& str) override {
+        data += str;
+        return true;
+    }
+};
