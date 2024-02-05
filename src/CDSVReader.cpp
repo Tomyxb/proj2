@@ -24,8 +24,7 @@ struct CDSVReader::SImplementation {
 
 //construction
 CDSVReader::CDSVReader(std::shared_ptr<CDataSource> src, char delimiter)
-    : DImplementation(new SImplementation(src, delimiter)){}
-
+            : DImplementation(new SImplementation(src, delimiter == '"' ? ',' : delimiter)) {}//change '"'to ,
 //no need to put anything in
 CDSVReader::~CDSVReader() {}
 
@@ -40,15 +39,34 @@ bool CDSVReader::ReadRow(std::vector<std::string> &row){
     if (!DImplementation->Readline()){
         return false;
     }
-    //get the line
+
     std::stringstream line_in(DImplementation->line_now);
-    //store for words
-    std::string words_spareted;
-    //push every words in the final result
-    while (std::getline(line_in, words_spareted, DImplementation->Delimiter)){
-        row.push_back(words_spareted);
+    std::string word;
+    bool inside_quotes = false;//test if inside the quotes
+    char next_char;
+
+    while (line_in >> std::noskipws >> next_char) {
+        if (next_char == '"'){
+            inside_quotes = !inside_quotes; //change the state of if inside the quotes
+            if (inside_quotes && line_in.peek() == '"'){"s"
+                //if '"' inside, add it to word
+                line_in >> next_char;
+                word += next_char;
+            }
+        } else if (next_char == DImplementation->Delimiter && !inside_quotes){
+            //if not inside, end
+            row.push_back(word);
+            word.clear();
+        } else if (next_char == '\n' && !inside_quotes){
+            //if not inside and no more words in this line
+            break;
+        } else {
+            word += next_char;//no quotes
+        }
+    }
+    if (!word.empty() || DImplementation->line_now.back() == DImplementation->Delimiter) {
+        //ensure the empty line would be added
+        row.push_back(word);
     }
 
     return true;
-}
-
