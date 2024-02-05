@@ -31,7 +31,7 @@ public:
         output += '"';
     }
     return output;
-}
+    }
     
     bool WriteRowImpl(const std::vector<std::string> &row) {
         std::stringstream ss;
@@ -48,7 +48,9 @@ public:
             ss << cell;
         }
         ss << std::endl;
-        return Sink->Write(ss.str());
+        std::string str = ss.str();
+        std::vector<char> vec(str.begin(), str.end());
+        return Sink->Write(vec);
     }
 };
 

@@ -2,7 +2,6 @@
 #include "DSVReader.h"
 #include <sstream>
 #include <iostream>
-
 struct CDSVReader::SImplementation {
     std::shared_ptr<CDataSource> Source;
     char Delimiter;
@@ -12,15 +11,30 @@ struct CDSVReader::SImplementation {
     SImplementation(std::shared_ptr<CDataSource> src, char delimiter)
         : Source(src), Delimiter(delimiter), IsEnd(false){}
 
-    //read line
+    // read line
     bool Readline(){
-        if (IsEnd || !Source || !std::getline(*Source, line_now)) {
-            IsEnd=true;
+        if (IsEnd || !Source) {
+            IsEnd = true;
             return false;
         }
-        return true;
+
+        line_now.clear();
+        char ch;
+        while (Source->Get(ch)) { // Use the Get method to read character by character
+            if (ch == '\n') {
+                break; // End of line
+            }
+            line_now += ch;
+        }
+
+        if (Source->End()) {
+            IsEnd = true; // Check if the source has ended
+        }
+
+        return !line_now.empty(); // Return true if something was read
     }
 };
+
 
 //construction
 CDSVReader::CDSVReader(std::shared_ptr<CDataSource> src, char delimiter)
@@ -48,7 +62,7 @@ bool CDSVReader::ReadRow(std::vector<std::string> &row){
     while (line_in >> std::noskipws >> next_char) {
         if (next_char == '"'){
             inside_quotes = !inside_quotes; //change the state of if inside the quotes
-            if (inside_quotes && line_in.peek() == '"'){"s"
+            if (inside_quotes && line_in.peek() == '"'){
                 //if '"' inside, add it to word
                 line_in >> next_char;
                 word += next_char;
@@ -64,9 +78,8 @@ bool CDSVReader::ReadRow(std::vector<std::string> &row){
             word += next_char;//no quotes
         }
     }
-    if (!word.empty() || DImplementation->line_now.back() == DImplementation->Delimiter) {
-        //ensure the empty line would be added
+    if (!word.empty() || (!DImplementation->line_now.empty() && DImplementation->line_now.back() == DImplementation->Delimiter)) {
         row.push_back(word);
     }
-
     return true;
+}

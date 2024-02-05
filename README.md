@@ -1,15 +1,9 @@
 # Project 2 README
 Xinbang Yuan 920853308
-Student 1: Partner1 Name (123456789)
-
-Student 2: Partner2 Name (123456987)
+Student 1: Zhongtian Yu 919551080
 
 ## Project Status
-XMLReader.cpp on Zhongtian
-XMLWriter.cpp on Zhongtian
-XMLReaderTest.cpp on
-XMLWriterTest.cpp on
-Makefile ing
+done
 ## Known Issues
 
 ## Code References
