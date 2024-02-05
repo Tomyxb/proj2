@@ -240,6 +240,42 @@ TEST(CDSVReader, lines8){
     EXPECT_EQ(row[2], "i");
 }
 
+//special situation
+TEST(CDSVReader, HandleValuesWithSpecialCharacters) {
+    auto dataSource = std::make_shared<InputDataType>("\"value,with,commas\",\"value\"\"with\"\"quotes\",\"value\nwith\nnewlines\"");
+    CDSVReader reader(dataSource, ',');
+    std::vector<std::string> row;
+    EXPECT_TRUE(reader.ReadRow(row));
+    EXPECT_EQ(row.size(), 3);
+    EXPECT_EQ(row[0], "\"value,with,commas\"");
+    EXPECT_EQ(row[1], "\"value\"\"with\"\"quotes\"");
+    EXPECT_EQ(row[2], "\"value\nwith\nnewlines\"");
+}
+TEST(CDSVReader, HandleDoubleQuotesInCell) {
+    auto dataSource = std::make_shared<InputDataType>("\"quote\"\"inside\"\"a\"\"cell\"");
+    CDSVReader reader(dataSource, ',');
+    std::vector<std::string> row;
+    EXPECT_TRUE(reader.ReadRow(row));
+    EXPECT_EQ(row.size(), 1);
+    EXPECT_EQ(row[0], "\"quote\"\"inside\"\"a\"\"cell\"");
+}
+TEST(CDSVReader, HandleEmptyLine) {
+    auto dataSource = std::make_shared<InputDataType>("\n");
+    CDSVReader reader(dataSource, ',');
+    std::vector<std::string> row;
+    EXPECT_TRUE(reader.ReadRow(row));
+    EXPECT_TRUE(row.empty());
+}
+TEST(CDSVReader, HandleDoubleQuoteAsDelimiter) {
+    auto dataSource = std::make_shared<InputDataType>("\"quoted,field\"");
+    CDSVReader reader(dataSource, '"');
+    std::vector<std::string> row;
+    EXPECT_TRUE(reader.ReadRow(row));
+    EXPECT_EQ(row.size(), 3);
+    EXPECT_EQ(row[1], ",");
+}
+
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
